@@ -60,7 +60,7 @@ public class Directory {
 			String classPath = this.packageName + "." + name.substring(0,name.length()-6);
 			Class<?> classFile = loader.loadClass(classPath);
 			this.classes.add(classFile);
-			Logger.logClass(classFile);
+			Logger.logClassFound(classFile);
 		    }
 		}
 		catch(NoClassDefFoundError e){

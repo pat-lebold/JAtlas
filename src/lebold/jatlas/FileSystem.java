@@ -13,18 +13,22 @@ import java.io.File;
  */
 public class FileSystem {
 
-    private Directory directory;
+    private Directory rootDirectory;
     
     public FileSystem(File file){
 	this.initDirectory(file);
     }
     
     private void initDirectory(File file){
-	this.directory = new Directory(file,"");
-	this.directory.init(file);
+	this.rootDirectory = new Directory(file,"");
+	this.rootDirectory.init(file);
     }
     
     public void reinitialize(){
-	this.directory.init(this.directory.getPath());
+	this.rootDirectory.init(this.rootDirectory.getPath());
+    }
+    
+    public Directory getRootDirectory(){
+	return this.rootDirectory;
     }
 }
