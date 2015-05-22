@@ -3,7 +3,8 @@
  */
 package lebold.jatlas.query;
 
-import lebold.jatlas.FileSystem;
+import lebold.jatlas.file.FileSystem;
+import lebold.jatlas.query.result.IQueryResult;
 
 /**
  * JAtlas

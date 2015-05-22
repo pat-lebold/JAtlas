@@ -6,7 +6,9 @@ package lebold.jatlas.query;
 import java.util.ArrayList;
 import java.util.List;
 
-import lebold.jatlas.FileSystem;
+import lebold.jatlas.file.FileSystem;
+import lebold.jatlas.query.impl.QueryClass;
+import lebold.jatlas.query.result.IQueryResult;
 
 /**
  * JAtlas
@@ -44,6 +46,6 @@ public class QueryEngine {
     }
     
     private void initializeQueries(){
-	//Add queries to the engine
+	this.queryList.add(new QueryClass());
     }
 }
