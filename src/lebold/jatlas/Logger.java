@@ -26,7 +26,7 @@ public class Logger {
 	if(logging)
 	    System.out.println(message);
     }
-    
+
     public static void logClassFound(Class<?> classFile){
 	if(logging){
 	    System.out.println("Class logged: " + classFile.getName());
@@ -77,23 +77,27 @@ public class Logger {
 	    t.printStackTrace();
 	}
     }
-    
+
     public static void logList(List<?> list){
-	list.forEach((element) -> log("\t"+element.toString()));
-    }
-    
-    public static void logResult(IQueryResult<?> result){
-	IQuery query = result.getQuery();
-	Object object = result.getResult();
-	
-	log("\n"+query.toString() + ": ");
-	
-	if(object instanceof List){
-	    List<?> list = (List<?>)object;
-	    logList(list);
+	if(logging){
+	    list.forEach((element) -> log("\t"+element.toString()));
 	}
-	else{
-	    log(object.toString());
+    }
+
+    public static void logResult(IQueryResult<?> result){
+	if(logging){
+	    IQuery query = result.getQuery();
+	    Object object = result.getResult();
+
+	    log("\n"+query.toString() + ": ");
+
+	    if(object instanceof List){
+		List<?> list = (List<?>)object;
+		logList(list);
+	    }
+	    else{
+		log(object.toString());
+	    }
 	}
     }
 
