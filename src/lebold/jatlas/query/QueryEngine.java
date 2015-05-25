@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lebold.jatlas.file.FileSystem;
-import lebold.jatlas.query.impl.QueryClass;
+import lebold.jatlas.query.error.NoResultsFoundException;
+import lebold.jatlas.query.impl.QueryClassBasic;
+import lebold.jatlas.query.impl.QueryClassExplicit;
 import lebold.jatlas.query.result.IQueryResult;
 
 /**
@@ -27,7 +29,7 @@ public class QueryEngine {
 	this.initializeQueries();
     }
     
-    public IQueryResult<?> executeQuery(String queryString){
+    public IQueryResult<?> executeQuery(String queryString) throws NoResultsFoundException{
 	for(IQuery query: this.queryList){
 	    if(query.isApplicable(queryString)){
     		return query.execute(this.system,queryString);
@@ -46,6 +48,7 @@ public class QueryEngine {
     }
     
     private void initializeQueries(){
-	this.queryList.add(new QueryClass());
+	this.queryList.add(new QueryClassBasic());
+	this.queryList.add(new QueryClassExplicit());
     }
 }

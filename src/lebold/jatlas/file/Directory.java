@@ -54,6 +54,11 @@ public class Directory {
     public String getPackageName(){
 	return this.packageName;
     }
+    
+    public String getBottomFolderName(){
+	String[] splitPackage = packageName.split("\\.");
+	return splitPackage[splitPackage.length-1];
+    }
 
     @SuppressWarnings("deprecation")
     private void loadClasses(File baseFile){

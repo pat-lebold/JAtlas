@@ -1,7 +1,7 @@
 /**
  * 
  */
-package lebold.jatlas.query;
+package lebold.jatlas.query.error;
 
 /**
  * JAtlas

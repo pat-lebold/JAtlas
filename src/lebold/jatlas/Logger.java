@@ -96,7 +96,7 @@ public class Logger {
 		logList(list);
 	    }
 	    else{
-		log(object.toString());
+		log("\t"+object.toString());
 	    }
 	}
     }

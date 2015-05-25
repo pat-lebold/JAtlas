@@ -10,6 +10,7 @@ import lebold.jatlas.file.Directory;
 import lebold.jatlas.file.FileSystem;
 import lebold.jatlas.query.AQuery;
 import lebold.jatlas.query.QueryParser;
+import lebold.jatlas.query.error.NoResultsFoundException;
 import lebold.jatlas.query.result.IQueryResult;
 import lebold.jatlas.query.result.QueryResultList;
 
@@ -19,22 +20,24 @@ import lebold.jatlas.query.result.QueryResultList;
  * @author Patrick Lebold
  *
  */
-public class QueryClass extends AQuery {
+public class QueryInterfaceBasic extends AQuery {
 
-    public QueryClass(){
-	super("CLASS <charsequence>");
+    public QueryInterfaceBasic(){
+	super("INTERFACE <interface name>");
     }
     
     /**
      * @see lebold.jatlas.query.IQuery#execute(lebold.jatlas.file.FileSystem, java.lang.String)
      */
     @Override
-    public IQueryResult<List<Class<?>>> execute(FileSystem system, String queryString) {
-	String[] splitQuery = queryString.split(" ");
+    public IQueryResult<List<Class<?>>> execute(FileSystem system, String queryString) throws NoResultsFoundException{
+	String[] splitQuery = QueryParser.splitQuery(queryString);
 	String className = splitQuery[1];
 
 	Directory root = system.getRootDirectory();
 	List<Class<?>> applicableClasses = this.pullApplicableClassesFromTree(root,className);
+	if(applicableClasses.size()==0)
+	    throw new NoResultsFoundException("No results found!");
 	return new QueryResultList<List<Class<?>>,Class<?>>(this,applicableClasses);
     }
 
@@ -43,10 +46,10 @@ public class QueryClass extends AQuery {
      */
     @Override
     public boolean isApplicable(String queryString) {
-	String[] splitQuery = queryString.split(" ");
+	String[] splitQuery = QueryParser.splitQuery(queryString);
 	if(splitQuery.length == 2){
 	    String query = splitQuery[0];
-	    if(query.equalsIgnoreCase("CLASS")){
+	    if(query.equalsIgnoreCase("INTERFACE")){
 		String className = splitQuery[1];
 		return QueryParser.isClassFormat(className);
 	    }
@@ -72,9 +75,9 @@ public class QueryClass extends AQuery {
 	List<Class<?>> applicableClasses = new LinkedList<Class<?>>();
 
 	for(Class<?> type: dir.getClasses()){
-	    if(!(type.isInterface()||type.isEnum())){
+	    if(type.isInterface()){
 		if(className.equals(type.getName()))
-		    applicableClasses.add(type);
+		    applicableClasses.add(0,type);
 		if(type.getName().contains(className))
 		    applicableClasses.add(type);
 	    }

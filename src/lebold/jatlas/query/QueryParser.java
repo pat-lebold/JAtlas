@@ -3,6 +3,10 @@
  */
 package lebold.jatlas.query;
 
+import lebold.jatlas.file.Directory;
+import lebold.jatlas.file.FileSystem;
+import lebold.jatlas.query.error.InvalidDirectoryException;
+
 /**
  * JAtlas
  *
@@ -13,6 +17,43 @@ public final class QueryParser {
 
     private QueryParser(){
 	//Filler constructor to prevent instantiation of class
+    }
+    
+    public static Directory fetchDirectory(FileSystem system, String[] packageArray) throws InvalidDirectoryException{
+	Directory root = system.getRootDirectory();
+	int numPackages = packageArray.length;
+	int currentIndex = 0;
+	while(!root.getPackageName().equals(packageToString(packageArray))){
+	    if(currentIndex==numPackages)
+		throw new InvalidDirectoryException("Directory Invalid: " + packageToString(packageArray));
+	    String searchingFolder = packageArray[currentIndex];
+	    boolean found = false;
+	    for(Directory sub:root.getSubDirectories()){
+		String folder = sub.getBottomFolderName();
+		if(folder.equals(searchingFolder)){
+		    currentIndex++;
+		    root = sub;
+		    found = true;
+		    break;
+		}
+	    }
+	    if(!found)
+		throw new InvalidDirectoryException("Directory Invalid: " + packageToString(packageArray));
+	}
+	return root;
+    }
+    
+    public static String packageToString(String[] packageSetup){
+	String packageString = "";
+	for(int n=0;n<packageSetup.length;n++){
+	    packageString += packageSetup[n] + ".";
+	}
+	packageString = packageString.substring(0,packageString.length()-1);
+	return packageString;
+    }
+    
+    public static String[] splitQuery(String queryString){
+	return queryString.split(" ");
     }
 
     public static boolean isClassFormat(String potentialClass){
@@ -36,6 +77,10 @@ public final class QueryParser {
 		return false;
 	}
 	return true;
+    }
+    
+    public static String[] splitPackage(String packageString){
+	return packageString.split("\\.");
     }
 
     public static boolean isJavaKeyword(String word){

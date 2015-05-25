@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import lebold.jatlas.file.FileSystem;
 import lebold.jatlas.query.QueryEngine;
+import lebold.jatlas.query.error.NoResultsFoundException;
 import lebold.jatlas.query.result.IQueryResult;
 
 public class Main {
@@ -22,8 +23,14 @@ public class Main {
 		String query = scanner.nextLine();
 		QueryEngine engine = workspace.getQueryEngine();
 		if(engine.isQueryValid(query)){
-		    IQueryResult<?> result = engine.executeQuery(query);
-		    Logger.logResult(result);
+		    IQueryResult<?> result;
+		    try {
+			result = engine.executeQuery(query);
+			    Logger.logResult(result);
+		    }
+		    catch (NoResultsFoundException e) {
+			Logger.logException(e);
+		    }
 		}
 		else{
 		    Logger.log("Query not valid");
